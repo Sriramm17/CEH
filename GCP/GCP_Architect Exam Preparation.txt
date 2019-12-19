@@ -1,0 +1,267 @@
+Trospehere techs - Imran trainer
+
+
+- Understand cost models, dont really need to know about exact cost for a service
+- case study that google has on their website will be as it is in the test. - byheart these case studies 
+- Check the link 
+- Exam blueprint must go thru 
+- Workbook :  https://docs.google.com/presentation/d/1fbQGpn4h1V898-kP9KUQcmgurrA6-vb6yiiodL8aytk/edit#slide=id.p
+
+- 20 Questions based on case study - > 30% of exam
+- Pass or Fail only no marking
+- Practice test : https://cloud.google.com/certification/practice-exam/cloud-architect
+- must go thru : https://gcp.solutions/
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+- Big table is not NOOPS - need to create a cluster - use datastore instead 
+- datastore has 10TB limitation so if that is case use bigable
+- BigQuery is datawarehouse and analytics - NO OPS , petabyte scale
+- Cloud SQL - limitation to scale 10TB ,no horizontal scaling
+- Cloud spanner - bigger than 10TB can go to petabytes and scale Horizontally and vertically --- it's expensive
+- Cloud SQL and spanner both are not NO-OPS, you need to mentione cluster size and rest management will be done by google
+
+- app engine : PAAS - you are limited to google for application
+- Kubernetes : application is not vendor specific 
+
+- most of services charged based on consumption - BigQuery
+- few of them on allocation - persistent disk
+
+- VM in same zone communication doesnt charge.
+- VM between zone communication - charges 
+- ingress data - no charge 
+
+Cost effective solutiuon and can rewrite code  : -- use app engine
+- App engine standard : - for ideal condition it deletes all containers. can scale down to 0 instances 
+- app engine tightly associated with datastore.
+- Fault tolerance can be achieved using duplication of components
+
+- Cloud DNS is 100% available
+
+- CDN - content delivery network - used to have min latency 
+	works with load balancer, reduce egress cost , no-ops,
+			 
+- Data proc : hadoop cluster for lift and shift. but this is not NoOPS, its fully managed after we define/size a cluster.
+	cluster deletion will lead to data loss.
+	Master does 
+
+- DataFlow : - based on apache beam , hadoop jobs needs to be re-written to use this service 
+
+			 
+			 
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Spikes at random - > think of auto scaling
+High available/fault tolerant  - > think of multi A-Z , multi region options
+Code no rewrite ? --> lift and shift
+code reqrite ? -- > app engine
+maintenance free --> PaaS i.e. noOPS services
+data type : product info, review , catalog --> No SQL database -- Datastore
+Quick move infra -->  lift and shift --> for lift and shift think of VMs / clusters
+containerizations or Virtual machine deployments multi platform/vendor requirement --> kubernetes ( App engine is google proprietory )
+DR solution --> datacenters should be 5000 miles apart
+
+cheap option --> app engine std and datastore
+app engine flex and cloud sql is costlier
+
+Edge location usefulnees / CDN can be done with Catching enablement
+
+cloudshell has 5gb persistant disk ... no data loss if we lose shell connection
+
+no questions on interacting with google cloud.
+
+Compute engine -- > use case -- > lift and shift, customization at OS level ,
+Cloud functions -- > use cae --> serverless, no customization, no OPS, charged for utilization of function time.
+kubernetes --> containerizations
+
+Google offers sustained usage discounts : - higher the use higher discount lower the cost 
+When would you most likely choose Compute Engine when deploying your applications? - lift and shift, customizations 
+
+Moving instance from zone to zone : -- need to use snapshot of boot disk to spin new vm .
+disk sizing upscale can be done when vm is up.
+
+Autoscaling is conservative : -- deploys most number of VMs incase there are different rules 
+which one goes first in autoscaling : -- 
+
+Snapshots : These are incremental and contains only changes to hard disk, stored in bucket we cant see the bucket.
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Networking - 
+onprem IPs can conflict with the ips in GCP if default VP used. hence use custom VPC .
+VPN tunnel - older concept to join two VPC... in GCP VPC peering takes care of it automatically. considering IPs of VPC does not overlap.
+
+firewall : - by default all ports are blocked/denied by default which are coming inside GCP. outside going are allowed.
+			difference between AWS and google - googles has allow and deny both while aws has deny only
+			Tags can be used 
+
+VPC : - spans regions
+Subnet : - spans zones
+Flowlogs : --- needs for network monitoring 
+
+network peeing is better than shared VPC 
+
+autoscaling :
+	- create instance group 
+	- cool down period : prevbents autoscaling to initiate multiple VMs considering the VM takes time to spin up and auto scalar find no VM available.
+	
+Load balancers : 
+	- TCP, HTTP, UDP, SSL proxy LB, 
+	- regional, global ,external , internal LB
+	- LB can have cloud storage as backend 
+	
+NAT :
+	- provides security
+	- no external ip still vm can connect to internet
+	- managed and highly available.
+
+Cloud DNS :
+	- 100% availability
+	- propogation of changes instantanious. no sync delay applicable.
+	- works with cloud storage, Load balancer
+
+Dedicated interconnect : - 10GBps speed 99.99% availability. SLA owned by Google.
+						- carrier peering 
+VPN : ypu are going thru internet, and 3GBps bandwidth.
+
+
+App engine STD : 
+	- limited launguage support
+	- network capability limited 
+	- timeouts 
+	- based on containers
+	- scale down to 0 easily
+	- Cost effective
+
+App engine Flexi :
+	- based on VM instances 
+	- more programming launguage support
+	- Docker image run
+	- can not scale down to 0 , at least 1 VM should be there
+	
+Kubernetes Engine :
+	- more flexible than app engine but less automated 
+	- useful for other cloud and on-premises deployments 
+	- GKE clusters needed which is nothing but collection of VM.
+	- pods collection of containers 
+
+Cloud functions : charged on milliseconds 
+
+Best option to keep master and slave in same zone for lowerst latency for big data processing.
+Keeping in different zone is also option but incurs egress cost.
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Pros and cons for :
+App engine standard and flexible
+Kubernetes
+Cloud Functions
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Storage : 
+	- cant go for class changes.
+	- Coldline has 3month upfront charges whereas Nearline 1month
+	- coldline is for archivals, backups and disaster recovery, Nearline is mostly for photo/video storage infrequently accessed.
+	- for scenario when you are confused between nearline or coldline , check for retention period requirements. if its for 
+		more than 1month for final deletion use coldline. if it's say 14 days for final deletion use Standard storage as it will cost less.
+CloudSQL 
+	- supports MySQL and PostgreSQL 
+	- cant be used as lift and shift for oracle/ db2 etc.
+	- its VM backed service , firewall can be configured for it.
+	- can have Read replica for read only operations.
+	- limited scalability 416GB mem , 10TB data , zone specific. Vertical scalability 
+Spanner :
+	- Horizontally scalable 
+	- realtime synchronous replication available.
+	- spans across multiple regions.
+	- multiregional options are there which are selective - precanned option from google can be selected.
+	- at least 3 nodes required for getting the SLA of 99.999% availability.
+	
+Datastore :
+	- NoOPS, NoSQL similar to mongo DB
+	- supports ACID transactions
+	- Flexible indexing supported.
+	- scale upto 10 TB.
+	- offline support for mobile/synchronization is not supported
+	
+Firestore :
+	- Reworking of firebase realtime database 
+	- Mainly for mobile apps .
+
+Big Table :
+	- Columnar database, similar to cassandra/Hbase .
+	- sparsely populated. ie. not all columns should have data.
+	- realtime petabytes of data can be injested.
+	- for IOT, mobile app, gaming use cases 
+	- Hbase API can be used from onprem to connect to bigtable.
+	- Must have a unique key in each table and that key will be indexed.
+
+Memorystore :
+	- fully managed in memory Redis database solution 
+	- scale 1GB to 300GB Instances 
+	- Available within same VPC.
+	
+BigQuery:
+	- Data warehouse, cheap storage
+	- fast NoOPS.
+	- in background it runs on VM and does Mapreduce
+	
+Encryption : 
+	- its encrypted at rest and transist 
+
+Members :
+	- allauthenticatedusers : the users who are 
+	- allusers :
+	
+Roles :
+	- premitive roles :	Existed before IAM, Editor, Owner, Viewer. and are project level.
+	- predefined roles : - curated roles : appengine admin, cloud.storage.admin etc. 
+	
+Encryption :
+	- DEK : Data encryption key . Saved along with Data.
+	- KEK : Key encryption key. To encrypt DEK .
+	- KMS : Key rotation / ring
+
+
+	
+Stackdriver :
+	- Retention period is 30 days
+	- can sink into cloud storage, bigquery, pubsub topic.
+	- Trace : debuging performance problems in code. no need to shutdown application 
+	- Debugging 
+
+Site reliability Engineering : (SRE)  -- not pf the exam topic 
+	- Googles version of DevOps
+
+Microservice architecture :
+	- Divide large prog into small
+	- independant programming, deployment, scaling
+	- Talks with each other thru APIs
+
+Deployment manager :	
+	- To deploy infrastructure as a code.
+	- .yaml file as config file  
+
+Blue-Green deployments makes rolling back to older version 
+	- Green env is new env used for new updates / patches etc. 
+	- Blue is Prod env.
+	- GKE and Appengine can make use of dlue-green deployment strategy.
+Rolling update :
+	- GKE with update commands 
+A/B testing :
+	- Test multiple versions at same time 
+	- AppEngine use traffic splitting to use this 
+	
+	
+Ngynx : used to host static web contents 
+
+
+
+
+
+
+
+ 
+
