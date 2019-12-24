@@ -18,3 +18,6 @@ findmyhash
 THC-Hydra
 John the Ripper
 SecLists
+arpspoof
+tcpdump
+msfvenom
