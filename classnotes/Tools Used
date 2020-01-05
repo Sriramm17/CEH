@@ -22,3 +22,4 @@ arpspoof
 tcpdump
 msfvenom
 dig
+sqlmap
